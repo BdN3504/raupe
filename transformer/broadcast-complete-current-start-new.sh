@@ -1,7 +1,7 @@
 #!/bin/bash
 scriptPath=$(dirname $(realpath -s "$0"))
 youtubeApiClientPath="$scriptPath/youtube-api-client"
-numberOfDaysPassed="$youtubeApiClientPath/get-number-of-days-since-start-of-stream.sh"
+numberOfDaysPassed=$("$youtubeApiClientPath/get-number-of-days-since-start-of-stream.sh")
 
 . "$youtubeApiClientPath/client-variables.sh"
 echo "Checking authentication"
