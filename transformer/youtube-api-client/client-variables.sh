@@ -87,8 +87,7 @@ while getopts ":s:t:" opt; do
       sed -i -E "s%^(broadcastDescription=).*$%\1\"$broadcastDescription\"%g" "$self"
       ;;
     t)
-      echo "-t was triggered, Parameter: $OPTARG" >&2
-      #sed -i -E "s%^(broadcastTitle=).*$%\1\"$broadcastTitle\"%g" "$self"
+      sed -i -E "s%^(broadcastTitle=).*$%\1\"$OPTARG\"%g" "$self"
       ;;
     \?)
       ;;
