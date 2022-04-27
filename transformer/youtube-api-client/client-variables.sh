@@ -49,7 +49,7 @@ streamDescription="Stream description"
 broadcastTitle="Broadcast title"
 broadcastDescription="Broadcast description"
 
-while getopts ":s:t:" opt; do
+while getopts ":st:" opt; do
   case $opt in
     s)
       self=$(realpath "$0")
@@ -88,7 +88,7 @@ while getopts ":s:t:" opt; do
       ;;
     t)
       self=$(realpath "$0")
-      sed -i -E "s%^(broadcastTitle=).*$%\1\"$OPTARG\"%g" "$self"
+      sed -i -E "s%^(broadcastTitle=).*$%\1\"$OPTARG\"%g" $3
       ;;
     \?)
       ;;
