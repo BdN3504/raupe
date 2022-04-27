@@ -49,7 +49,7 @@ streamDescription="Stream description"
 broadcastTitle="Broadcast title"
 broadcastDescription="Broadcast description"
 
-while getopts ":s" opt; do
+while getopts ":s:t:" opt; do
   case $opt in
     s)
       self=$(realpath "$0")
@@ -85,6 +85,10 @@ while getopts ":s" opt; do
       read -re -i "$broadcastDescription" -p "Specify the description of the broadcast: " broadcastDescriptionInput
       broadcastDescription=${broadcastDescriptionInput:-$broadcastDescription}
       sed -i -E "s%^(broadcastDescription=).*$%\1\"$broadcastDescription\"%g" "$self"
+      ;;
+    t)
+      echo "-t was triggered, Parameter: $OPTARG" >&2
+      #sed -i -E "s%^(broadcastTitle=).*$%\1\"$broadcastTitle\"%g" "$self"
       ;;
     \?)
       ;;
