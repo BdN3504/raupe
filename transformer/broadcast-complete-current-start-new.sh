@@ -1,15 +1,16 @@
 #!/bin/bash
-cd /home/pi/raupe/transformer
+scriptPath=$(dirname $(realpath -s "$0"))
+youtubeApiClientPath="$scriptPath/youtube-api-client"
 
 echo "Checking authentication"
-./youtube-api-client/authentication-check.sh
+"$youtubeApiClientPath/authentication-check.sh"
 
-numberOfDaysPassed=$("./youtube-api-client/get-number-of-days-since-start-of-stream.sh")
-./youtube-api-client/livebroadcasts-transition-complete.sh
-newTitle="Caterpillar live broadcast - Vanessa Cardui - day $numberOfDaysPassed" ./youtube-api-client/client-variables.sh
-./youtube-api-client/client-variables.sh -t "$newTitle"
-./youtube-api-client/livebroadcasts-insert.sh
-./youtube-api-client/livebroadcasts-bind.sh
-./youtube-api-client/livebroadcasts-transition-testing.sh
+numberOfDaysPassed=$("$youtubeApiClientPath/get-number-of-days-since-start-of-stream.sh")
+"$youtubeApiClientPath/livebroadcasts-transition-complete.sh"
+newTitle="Caterpillar live broadcast - Vanessa Cardui - day $numberOfDaysPassed"
+"$youtubeApiClientPath/client-variables.sh" -t "$newTitle" "$youtubeApiClientPath/client-variables.sh"
+"$youtubeApiClientPath/livebroadcasts-insert.sh"
+"$youtubeApiClientPath/livebroadcasts-bind.sh"
+"$youtubeApiClientPath/livebroadcasts-transition-testing.sh"
 sleep 10
-./youtube-api-client/livebroadcasts-transition-live.sh
+"$youtubeApiClientPath/livebroadcasts-transition-live.sh"
