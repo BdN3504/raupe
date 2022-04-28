@@ -38,12 +38,14 @@ case $httpResponseCode in
       ;;
       "invalidTransition")
         echo "The live broadcast can't transition from its current status to the requested status. $callingScript"
-	/bin/bash "$scriptPath/livebroadcasts-list-inserted.sh"
+        /bin/bash "$scriptPath/livebroadcasts-list-inserted.sh"
+        sleep 10
+        /bin/bash "$callingScript"
         exit 1
       ;;
       "redundantTransition")
         echo "The live broadcast is already in the requested status or processing to the requested status. $callingScript"
-	/bin/bash "$scriptPath/livebroadcasts-list-inserted.sh"
+        /bin/bash "$scriptPath/livebroadcasts-list-inserted.sh"
         exit 1
       ;;
     esac
