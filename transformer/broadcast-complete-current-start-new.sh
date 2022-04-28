@@ -6,7 +6,7 @@ echo "Checking authentication"
 
 numberOfDaysPassed=$("./youtube-api-client/get-number-of-days-since-start-of-stream.sh")
 ./youtube-api-client/livebroadcasts-transition-complete.sh
-newTitle="Caterpillar live broadcast - Vanessa Cardui - day $numberOfDaysPassed"
+newTitle="Caterpillar live broadcast - Vanessa Cardui - day $numberOfDaysPassed" ./youtube-api-client/client-variables.sh
 ./youtube-api-client/client-variables.sh -t "$newTitle"
 ./youtube-api-client/livebroadcasts-insert.sh
 ./youtube-api-client/livebroadcasts-bind.sh
