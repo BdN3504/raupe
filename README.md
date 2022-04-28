@@ -15,7 +15,21 @@ than 24 hours.
 Start a capture on the capture device by running [capture-device-run.sh](/capture-device/capture-device-run.sh). Set up the transformer
 by running [transformer-setup.sh](/transformer/transformer-setup.sh). Set up the stream by running [stream-setup.sh](/transformer/stream-setup.sh). Start streaming
 by running [transformer-run.sh](/transformer/transformer-run.sh) or better yet create a cron job that runs transformer-run.sh
-every minute. See below for requirements.
+every minute. See below for requirements. 
+
+### 12 hour limitation
+
+If you create a live broadcast that is [longer than 12 hours](https://support.google.com/youtube/answer/6247592?hl=en-GB), the recording of
+the broadcast will not be saved. You will see the broadcast in the list of your live broadcasts, but will not be able to
+watch or edit it. To remedy this limitation, you can add a cronjob that runs on specific hours, say every 8 hours, which 
+executes the [broadcast-complete-current-start-new.sh](/transformer/broadcast-complete-current-start-new.sh) script.
+This script uses the variables that have been set before to complete the currently running live broadcast and start a new
+one that will get bound to the livestream that is still active. It is possible to dynamically change the title of the 
+broadcast by using the `"$youtubeApiClientPath/client-variables.sh" -t "New title with $variable" "$youtubeApiClientPath/client-variables.sh"` 
+parameters in the [broadcast-complete-current-start-new.sh](/transformer/broadcast-complete-current-start-new.sh) script.
+
+The script [get-number-of-days-since-start-of-stream.sh](/transformer/youtube-api-client/get-number-of-days-since-start-of-stream.sh)
+can be used to construct the dynamic title.
 
 ## Capture device
 
