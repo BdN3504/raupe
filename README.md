@@ -84,3 +84,4 @@ via the livestream [`id`](https://developers.google.com/youtube/v3/live/docs/liv
 be [`transitioned`](https://developers.google.com/youtube/v3/live/docs/liveBroadcasts/transition#broadcastStatus) to the [`live`](https://developers.google.com/youtube/v3/live/docs/liveBroadcasts#status.lifeCycleStatus) status.
 
 All the http requests are made with [curl](https://curl.se/). Json parsing is done with [jq](https://stedolan.github.io/jq/).
+Jobs are controlled with [screen](https://www.gnu.org/software/screen/).
