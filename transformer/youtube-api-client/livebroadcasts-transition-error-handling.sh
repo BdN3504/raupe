@@ -35,6 +35,7 @@ case $httpResponseCode in
       "errorStreamInactive")
         echo "The requested transition is not allowed when the stream that is bound to the broadcast is inactive."
         /bin/bash "$scriptPath/../stream-wait-for-data.sh"
+        /bin/bash "$callingScript"
         exit 1
       ;;
       "invalidTransition")
