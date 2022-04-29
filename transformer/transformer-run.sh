@@ -35,6 +35,9 @@ if ((ffmpegPid > 0)); then
 	secondCaptureTimestamp=$(timeout .5 strace -p$ffmpegPid -s9999 2>&1 | grep -oh "time=[[:digit:]]*:[[:digit:]]*:[[:digit:]]*\.[[:digit:]]*")
 	echo "$secondCaptureTimestamp" >> "$logFile"
 	if [ "$firstCaptureTimestamp" = "$secondCaptureTimestamp" ]; then
+	  if [ -z "$firstCaptureTimestamp" ]; then
+	    exit 0
+    fi
 	  echo "Same timestamps found, restarting ffmpeg" >> "$logFile"
 	  screen -S raupe -X quit
 	  sleep 1
