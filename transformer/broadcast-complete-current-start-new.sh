@@ -12,5 +12,5 @@ newTitle="Fancy broadcast title incorporating the number of days passed ($number
 "$youtubeApiClientPath/livebroadcasts-insert.sh"
 "$youtubeApiClientPath/livebroadcasts-bind.sh"
 "$youtubeApiClientPath/livebroadcasts-transition-testing.sh"
-sleep 10
+"$scriptPath/broadcast-wait-for-test.sh"
 "$youtubeApiClientPath/livebroadcasts-transition-live.sh"

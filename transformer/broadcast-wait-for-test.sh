@@ -12,8 +12,8 @@ broadCastStatus=$(jq -r ".items[] | select(.id == $broadCastId).status.lifeCycle
 
 if [[ $broadCastStatus != "testing" ]]; then
   echo "Broadcast with id $broadCastId is not testing yet. Status is \"$broadCastStatus\""
-  ./youtube-api-client/livebroadcasts-transition-testing.sh
+  "$scriptPath/livebroadcasts-transition-testing.sh"
   sleep 10
-  ./"$0"
+  "$scriptPath/$0"
   exit 0
 fi
