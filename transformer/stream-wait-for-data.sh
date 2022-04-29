@@ -16,8 +16,8 @@ streamStatus=$(jq -r ".items[] | select(.id == $streamId).status.streamStatus" "
 if [[ $streamStatus != "active" ]]; then
   echo "Stream with id $streamId has status \"$streamStatus\", restarting transformer."
   screen -S raupe -X quit
-  ./transformer-run.sh
+  "$scriptPath/transformer-run.sh"
   sleep 10
-  ./"$0"
+  "$scriptPath/$0"
   exit 0
 fi
