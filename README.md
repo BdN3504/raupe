@@ -26,7 +26,7 @@ executes the [broadcast-complete-current-start-new.sh](/transformer/broadcast-co
 This script uses the variables that have been set before to complete the currently running live broadcast and start a new
 one that will get bound to the livestream that is still active. It is possible to dynamically change the title of the 
 broadcast by using the `"$youtubeApiClientPath/client-variables.sh" -t "New title with $variable" "$youtubeApiClientPath/client-variables.sh"` 
-parameters in the [broadcast-complete-current-start-new.sh](/transformer/broadcast-complete-current-start-new.sh) script.
+parameters in the [broadcast-complete-current-start-new.sh](/transformer/broadcast-complete-current-start-new.sh#L10) script.
 
 The script [get-number-of-days-since-start-of-stream.sh](/transformer/youtube-api-client/get-number-of-days-since-start-of-stream.sh)
 can be used to construct the dynamic title.
@@ -84,3 +84,4 @@ via the livestream [`id`](https://developers.google.com/youtube/v3/live/docs/liv
 be [`transitioned`](https://developers.google.com/youtube/v3/live/docs/liveBroadcasts/transition#broadcastStatus) to the [`live`](https://developers.google.com/youtube/v3/live/docs/liveBroadcasts#status.lifeCycleStatus) status.
 
 All the http requests are made with [curl](https://curl.se/). Json parsing is done with [jq](https://stedolan.github.io/jq/).
+Jobs are controlled with [screen](https://www.gnu.org/software/screen/).
