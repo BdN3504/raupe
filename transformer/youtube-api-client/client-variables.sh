@@ -18,6 +18,7 @@ apiVersion=v3
 liveBroadcastsEndpoint="$apiBaseUrl/$apiName/$apiVersion/liveBroadcasts"
 liveStreamsEndpoint="$apiBaseUrl/$apiName/$apiVersion/liveStreams"
 channelsEndpoint="$apiBaseUrl/$apiName/$apiVersion/channels"
+playlistsEndpoint="$apiBaseUrl/$apiName/$apiVersion/playlists"
 
 scope=https://www.googleapis.com/auth/youtube.force-ssl
 
@@ -42,6 +43,7 @@ streamsDeleteResponse=.livestreams-delete-response.json
 streamsInsertResponse=.livestreams-insert-response.json
 streamsListInsertedResponse=.livestreams-list-inserted-response.json
 streamsListMineResponse=.livestreams-list-mine-response.json
+playlistsListMineResponse=.playlists-list-mine-response.json
 
 streamTitle="Stream title"
 streamDescription="Stream description"
