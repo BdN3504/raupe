@@ -31,7 +31,7 @@ httpResponseCode=$(curl \
   --compressed \
   -o "$scriptPath/$responseFile")
 
-"$scriptPath/playlists-list-error-handling.sh" \
+"$scriptPath/playlists-insert-error-handling.sh" \
 $httpResponseCode \
 "$scriptPath/$responseFile" \
 "$(realpath "$0")"
