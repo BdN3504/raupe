@@ -8,4 +8,4 @@ echo "Checking authentication"
 
 responseFile="$youtubeApiClientPath/$broadcastsListActiveResponse"
 echo "These are the youtube urls to the currently active livebroadcasts of your channel:"
-/bin/bash "$youtubeApiClientPath/livebroadcasts-list-active.sh" | jq -r --arg prefix "https://youtu.be/" '$prefix + .items[].id'
+/bin/bash "$youtubeApiClientPath/livebroadcasts-list-active.sh" | jq -r --arg prefix "https://youtu.be/" '.items[] | $prefix + (.id + " - " + .snippet.title)'

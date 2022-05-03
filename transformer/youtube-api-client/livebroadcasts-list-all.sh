@@ -5,12 +5,16 @@ scriptPath=$(dirname $(realpath -s "$0"))
 access_token=$(jq -r .access_token "$scriptPath/$tokenRefreshResponse")
 responseFile=$broadcastsListAllResponse
 
+nextPageToken=$1
+query="$liveBroadcastsEndpoint?broadcastStatus=all"
+[ -n "$nextPageToken" ] && query+="&pageToken=$nextPageToken"
+
 httpResponseCode=$(curl \
   -s \
   -w "%{http_code}" \
   --location \
   --request GET \
-  "$liveBroadcastsEndpoint?broadcastStatus=all" \
+  "$query" \
   --header "Accept: application/json" \
   --header "Authorization: Bearer $access_token" \
   -o "$scriptPath/$responseFile")
