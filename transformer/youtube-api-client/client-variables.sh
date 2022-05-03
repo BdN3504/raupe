@@ -44,6 +44,7 @@ streamsInsertResponse=.livestreams-insert-response.json
 streamsListInsertedResponse=.livestreams-list-inserted-response.json
 streamsListMineResponse=.livestreams-list-mine-response.json
 playlistsListMineResponse=.playlists-list-mine-response.json
+playlistsInsertResponse=.playlists-insert-response.json
 
 streamTitle="Stream title"
 streamDescription="Stream description"
