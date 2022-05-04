@@ -10,14 +10,14 @@ if (($# < 2)); then
   echo "2. : Id of the video to add to the playlist."
 fi
 
-playlistId="$1"
-videoId="$2"
+playlistId=$1
+videoId=$2
 
 responseFile=$playlistItemsInsertResponse
 
 query="part=snippet"
 
-content << END_OF_CONTENT
+content=$(cat << EOF
 {
   "snippet": {
     "playlistId": "$playlistId",
@@ -28,12 +28,8 @@ content << END_OF_CONTENT
     }
   }
 }
-END_OF_CONTENT
-
-echo "$content"
-exit 0
-snippet="{'title':'$1','description':'$2','defaultLanguage':'$3'}"
-status="{'privacyStatus':'$4'}"
+EOF
+)
 
 httpResponseCode=$(curl \
   -s \
