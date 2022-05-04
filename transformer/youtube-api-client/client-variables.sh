@@ -54,6 +54,11 @@ streamDescription="Stream description"
 broadcastTitle="Broadcast title"
 broadcastDescription="Broadcast description"
 
+playlistTitle="Playlist title"
+playlistDescription="Playlist description"
+playlistDescriptionLanguage="en"
+playlistVisibility="unlisted"
+
 while getopts ":st:" opt; do
   case $opt in
     s)
@@ -90,6 +95,24 @@ while getopts ":st:" opt; do
       read -re -i "$broadcastDescription" -p "Specify the description of the broadcast: " broadcastDescriptionInput
       broadcastDescription=${broadcastDescriptionInput:-$broadcastDescription}
       sed -i -E "s%^(broadcastDescription=).*$%\1\"$broadcastDescription\"%g" "$self"
+
+      read -re -i "$playlistTitle" -p "Specify the title of the playlist \
+      to which all the videos for this streaming series will be added to: " playlistTitleInput
+      playlistTitle=${playlistTitleInput:-$playlistTitle}
+      sed -i -E "s%^(playlistTitle=).*$%\1\"$playlistTitle\"%g" "$self"
+
+      read -re -i "$playlistDescription" -p "Specify the description of the playlist: " playlistDescriptionInput
+      playlistDescription=${playlistDescriptionInput:-$playlistDescription}
+      sed -i -E "s%^(playlistDescription=).*$%\1\"$playlistDescription\"%g" "$self"
+
+      read -re -i "$playlistDescriptionLanguage" -p "Provide a two letter language code which the playlist \
+      title and description use: " playlistDescriptionLanguageInput
+      playlistDescriptionLanguage=${playlistDescriptionLanguageInput:-$playlistDescriptionLanguage}
+      sed -i -E "s%^(playlistDescriptionLanguage=).*$%\1\"$playlistDescriptionLanguage\"%g" "$self"
+
+      read -re -i "$playlistVisibility" -p "Specify the visibility of the playlist (private, public or unlisted): " playlistVisibilityInput
+      playlistVisibility=${playlistVisibilityInput:-$playlistVisibility}
+      sed -i -E "s%^(playlistVisibility=).*$%\1\"$playlistVisibility\"%g" "$self"
       ;;
     t)
       self=$(realpath "$0")
