@@ -22,11 +22,12 @@ every minute. See below for requirements.
 If you create a live broadcast that is [longer than 12 hours](https://support.google.com/youtube/answer/6247592?hl=en-GB), the recording of
 the broadcast will not be saved. You will see the broadcast in the list of your live broadcasts, but will not be able to
 watch or edit it. To remedy this limitation, you can add a cronjob that runs on specific hours, say every 8 hours, which 
-executes the [broadcast-complete-current-start-new.sh](/transformer/broadcast-complete-current-start-new.sh) script.
-This script uses the variables that have been set before to complete the currently running live broadcast and start a new
-one that will get bound to the livestream that is still active. It is possible to dynamically change the title of the 
-broadcast by using the `"$youtubeApiClientPath/client-variables.sh" -t "New title with $variable" "$youtubeApiClientPath/client-variables.sh"` 
-parameters in the [broadcast-complete-current-start-new.sh](/transformer/broadcast-complete-current-start-new.sh#L10) script.
+executes the [broadcast-complete-current-start-new.sh](/transformer/broadcast-complete-current-start-new.sh) script. This script uses the 
+variables that have been set before to complete the currently running live broadcast and start a new one that will get bound to the 
+livestream that is still active. This script also adds the newly created livebroadcast to a playlist. The playlist properties are defined 
+during the stream setup.
+
+It is possible to dynamically change the title of the livebroadcast by using the `"$youtubeApiClientPath/client-variables.sh" -t "New title with $variable" "$youtubeApiClientPath/client-variables.sh"` parameters in the [broadcast-complete-current-start-new.sh](/transformer/broadcast-complete-current-start-new.sh#L10) script. 
 
 The script [get-number-of-days-since-start-of-stream.sh](/transformer/youtube-api-client/get-number-of-days-since-start-of-stream.sh)
 can be used to construct the dynamic title.
@@ -82,6 +83,8 @@ needs to be [`inserted`](https://developers.google.com/youtube/v3/live/docs/live
 on YouTube, a [`livebroadcast resource`](https://developers.google.com/youtube/v3/live/docs/liveBroadcasts#resource) needs to be created and [`bound`](https://developers.google.com/youtube/v3/live/docs/liveBroadcasts/bind#streamId) to the `livestream resource`
 via the livestream [`id`](https://developers.google.com/youtube/v3/live/docs/liveStreams#id). After the broadcast is successfully bound to the livestream, it needs to
 be [`transitioned`](https://developers.google.com/youtube/v3/live/docs/liveBroadcasts/transition#broadcastStatus) to the [`live`](https://developers.google.com/youtube/v3/live/docs/liveBroadcasts#status.lifeCycleStatus) status.
+
+Livebroadcasts can be added to a [`playlist`](https://developers.google.com/youtube/v3/docs/playlists#resource) as a [`playlistItem`](https://developers.google.com/youtube/v3/docs/playlistItems#resource).
 
 All the http requests are made with [curl](https://curl.se/). Json parsing is done with [jq](https://stedolan.github.io/jq/).
 Jobs are controlled with [screen](https://www.gnu.org/software/screen/).
