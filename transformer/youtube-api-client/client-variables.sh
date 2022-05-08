@@ -3,7 +3,7 @@
 code=
 client_id=
 client_secret=
-redirect_uri=urn:ietf:wg:oauth:2.0:oob
+redirect_uri=
 
 oAuthApiDiscoveryUrl=https://accounts.google.com/.well-known/openid-configuration
 authorization_endpoint=https://accounts.google.com/o/oauth2/v2/auth
@@ -73,11 +73,25 @@ while getopts ":st:" opt; do
       client_secret=${client_secretInput:-$client_secret}
       sed -i -E "s%^(client_secret=).*$%\1$client_secret%g" "$self"
 
+      echo "To acquire an authorization code, you need to have a working ssl endpoint that can receive requests from \
+      the Google oAuth flow. If this software is running on a server that does not have a commercial ssl certificate, \
+      you can use the letsencrypt certbot client alongside a domain provided by duckdns.org to enable an ssl webserver. \
+      Once you have certbot setup and the certificate file reside in your /etc/letsencrypt/live/<subdirectories>, you \
+      can copy your fullchain.pem and privkey.pem certificates to the oauth-redirect/certs directory. This script will \
+      then automatically enable an https server for the specified domain, listen for the authorization code request and \
+      save the authorization code to retrieve the access token."
+
+      read -re -i "$redirect_uri" -p "Provide the https redirect uri that is defined for the client in the google developer console here: " redirect_uriInput
+      redirect_uri=${redirect_uriInput:-$credirect_uri}
+      sed -i -E "s%^(redirect_uri=).*$%\1$redirect_uri%g" "$self"
+
       echo "Visit the following url in a browser \
       $authorization_endpoint?client_id=$client_id&redirect_uri=$redirect_uri&scope=$scope&response_type=code&access_type=offline"
 
-      read -re -i "$code" -p "Paste the code that is displayed in your browser here: " codeInput
-      code=${codeInput:-$code}
+      scriptPath=$(dirname $(realpath -s "$0"))
+      oauthRedirectPath="$scriptPath/oauth-redirect"
+
+      code=$("$oauthRedirectPath/wait-for-authcode.sh 2>&1")
       sed -i -E "s%^(code=).*$%\1$code%g" "$self"
 
       read -re -i "$streamTitle" -p "Specify the title of the stream: " streamTitleInput
