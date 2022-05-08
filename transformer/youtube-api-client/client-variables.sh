@@ -90,9 +90,9 @@ while getopts ":st:" opt; do
 
       scriptPath=$(dirname $(realpath -s "$0"))
       oauthRedirectPath="$scriptPath/oauth-redirect"
-
-      code=$("$oauthRedirectPath/wait-for-authcode.sh 2>&1")
-      sed -i -E "s%^(code=).*$%\1$code%g" "$self"
+      /bin/bash "$oauthRedirectPath/wait-for-authcode.sh"
+      authCode=$(cat "$oauthRedirectPath/authCode")
+      sed -i -E "s%^(code=).*$%\1$authCode%g" "$self"
 
       read -re -i "$streamTitle" -p "Specify the title of the stream: " streamTitleInput
       streamTitle=${streamTitleInput:-$streamTitle}
