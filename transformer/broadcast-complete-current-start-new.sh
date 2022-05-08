@@ -14,3 +14,10 @@ newTitle="Fancy broadcast title incorporating the number of days passed ($number
 "$youtubeApiClientPath/livebroadcasts-transition-testing.sh"
 "$scriptPath/broadcast-wait-for-test.sh"
 "$youtubeApiClientPath/livebroadcasts-transition-live.sh"
+"$youtubeApiClientPath/playlists-list-mine.sh"
+. "$youtubeApiClientPath/client-variables.sh"
+playlistId=$(jq -r ".items[] | select(.snippet.title = \"$playlistTitle\").id" "$youtubeApiClientPath/$playlistsListMineResponse")
+[ -z "$playlistId" ] && "$youtubeApiClientPath/playlists-insert.sh" "$playlistTitle" "$playlistDescription" "$playlistDescriptionLanguage" "$playlistVisibility" && playlistId=$(jq -r ".id" "$youtubeApiClientPath/$playlistsInsertResponse")
+videoId=$(jq -r ".id" "$youtubeApiClientPath/$broadcastsInsertResponse")
+[ -z "$videoId" ] && echo "No livebroadcast has been inserted yet" && exit 1
+"$youtubeApiClientPath/playlistItems-insert.sh" "$playlistId" "$videoId"
