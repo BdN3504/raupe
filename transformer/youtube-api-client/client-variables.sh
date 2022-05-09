@@ -86,7 +86,7 @@ while getopts ":st:" opt; do
       sed -i -E "s%^(redirect_uri=).*$%\1$redirect_uri%g" "$self"
 
       echo "Visit the following url in a browser \
-      $authorization_endpoint?client_id=$client_id&redirect_uri=$redirect_uri&scope=$scope&response_type=code&access_type=offline"
+      $authorization_endpoint?client_id=$client_id&redirect_uri=$redirect_uri&scope=$scope&prompt=consent&response_type=code&access_type=offline"
 
       scriptPath=$(dirname $(realpath -s "$0"))
       oauthRedirectPath="$scriptPath/oauth-redirect"
