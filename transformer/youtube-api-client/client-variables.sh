@@ -90,7 +90,7 @@ while getopts ":st:" opt; do
 
       scriptPath=$(dirname $(realpath -s "$0"))
       oauthRedirectPath="$scriptPath/oauth-redirect"
-      /bin/bash "$oauthRedirectPath/wait-for-authcode.sh"
+      /bin/bash "$oauthRedirectPath/wait-for-authcode.sh" "$scope"
       authCode=$(cat "$oauthRedirectPath/authCode")
       sed -i -E "s%^(code=).*$%\1$authCode%g" "$self"
 
