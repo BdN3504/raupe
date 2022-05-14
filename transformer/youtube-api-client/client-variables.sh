@@ -76,7 +76,7 @@ while getopts ":st:" opt; do
       echo "To acquire an authorization code, you need to have a working ssl endpoint that can receive requests from \
       the Google oAuth flow. If this software is running on a server that does not have a commercial ssl certificate, \
       you can use the letsencrypt certbot client alongside a domain provided by duckdns.org to enable an ssl webserver. \
-      Once you have certbot setup and the certificate file reside in your /etc/letsencrypt/live/<subdirectories>, you \
+      Once you have certbot setup and the certificate files reside in your /etc/letsencrypt/live/<subdirectories>, you \
       can copy your fullchain.pem and privkey.pem certificates to the oauth-redirect/certs directory. This script will \
       then automatically enable an https server for the specified domain, listen for the authorization code request and \
       save the authorization code to retrieve the access token."
