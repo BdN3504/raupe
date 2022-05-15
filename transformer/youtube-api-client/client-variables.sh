@@ -4,6 +4,7 @@ code=
 client_id=
 client_secret=
 redirect_uri=
+oauthCredentialAppType=
 
 oAuthApiDiscoveryUrl=https://accounts.google.com/.well-known/openid-configuration
 authorization_endpoint=https://accounts.google.com/o/oauth2/v2/auth
@@ -65,6 +66,35 @@ while getopts ":st:" opt; do
       self=$(realpath "$0")
 
       echo "Visit the developer console api credentials url in a browser: https://console.cloud.google.com/apis/credentials"
+      until [ "$oauthCredentialAppType" == "web" ] || [ "$oauthCredentialAppType" == "desktop" ]
+      do
+        read -rp "Which type of credentials are you going to use? (web or desktop)" oauthCredentialAppType
+
+        case $oauthCredentialAppType in
+          web)
+            sed -i -E "s%^(oauthCredentialAppType=).*$%\1$oauthCredentialAppType%g" "$self"
+            echo "To acquire an authorization code, you need to have a working ssl endpoint that can receive requests from \
+            the Google oAuth flow. If this software is running on a server that does not have a commercial ssl certificate, \
+            you can use the letsencrypt certbot client alongside a domain provided by duckdns.org to enable an ssl webserver. \
+            Once you have certbot setup and the certificate file reside in your /etc/letsencrypt/live/<subdirectories>, you \
+            can copy your fullchain.pem and privkey.pem certificates to the oauth-redirect/certs directory. This script will \
+            then automatically enable an https server for the specified domain, listen for the authorization code request and \
+            save the authorization code to retrieve the access token."
+
+            read -re -i "$redirect_uri" -p "Provide the https redirect uri that is defined for the client in the google developer console here: " redirect_uriInput
+            redirect_uri=${redirect_uriInput:-$credirect_uri}
+            sed -i -E "s%^(redirect_uri=).*$%\1$redirect_uri%g" "$self"
+            ;;
+          desktop)
+            sed -i -E "s%^(oauthCredentialAppType=).*$%\1$oauthCredentialAppType%g" "$self"
+            redirect_uri="urn:ietf:wg:oauth:2.0:oob"
+            sed -i -E "s%^(redirect_uri=).*$%\1$redirect_uri%g" "$self"
+            ;;
+          *) echo "Invalid app type $oauthCredentialAppType"
+            ;;
+        esac
+      done
+
       read -re -i "$client_id" -p "Provide the oAuth client id: " client_idInput
       client_id=${client_idInput:-$client_id}
       sed -i -E "s%^(client_id=).*$%\1$client_id%g" "$self"
@@ -73,26 +103,23 @@ while getopts ":st:" opt; do
       client_secret=${client_secretInput:-$client_secret}
       sed -i -E "s%^(client_secret=).*$%\1$client_secret%g" "$self"
 
-      echo "To acquire an authorization code, you need to have a working ssl endpoint that can receive requests from \
-      the Google oAuth flow. If this software is running on a server that does not have a commercial ssl certificate, \
-      you can use the letsencrypt certbot client alongside a domain provided by duckdns.org to enable an ssl webserver. \
-      Once you have certbot setup and the certificate file reside in your /etc/letsencrypt/live/<subdirectories>, you \
-      can copy your fullchain.pem and privkey.pem certificates to the oauth-redirect/certs directory. This script will \
-      then automatically enable an https server for the specified domain, listen for the authorization code request and \
-      save the authorization code to retrieve the access token."
-
-      read -re -i "$redirect_uri" -p "Provide the https redirect uri that is defined for the client in the google developer console here: " redirect_uriInput
-      redirect_uri=${redirect_uriInput:-$credirect_uri}
-      sed -i -E "s%^(redirect_uri=).*$%\1$redirect_uri%g" "$self"
-
       echo "Visit the following url in a browser \
       $authorization_endpoint?client_id=$client_id&redirect_uri=$redirect_uri&scope=$scope&prompt=consent&response_type=code&access_type=offline"
 
-      scriptPath=$(dirname $(realpath -s "$0"))
-      oauthRedirectPath="$scriptPath/oauth-redirect"
-      /bin/bash "$oauthRedirectPath/wait-for-authcode.sh" "$scope"
-      authCode=$(cat "$oauthRedirectPath/authCode")
-      sed -i -E "s%^(code=).*$%\1$authCode%g" "$self"
+      case $oauthCredentialAppType in
+        web)
+          scriptPath=$(dirname $(realpath -s "$0"))
+          oauthRedirectPath="$scriptPath/oauth-redirect"
+          /bin/bash "$oauthRedirectPath/wait-for-authcode.sh" "$scope"
+          authCode=$(cat "$oauthRedirectPath/authCode")
+          sed -i -E "s%^(code=).*$%\1$authCode%g" "$self"
+          ;;
+        desktop)
+          read -re -i "$code" -p "Paste the code that is displayed in your browser here: " codeInput
+          code=${codeInput:-$code}
+          sed -i -E "s%^(code=).*$%\1$code%g" "$self"
+          ;;
+      esac
 
       read -re -i "$streamTitle" -p "Specify the title of the stream: " streamTitleInput
       streamTitle=${streamTitleInput:-$streamTitle}

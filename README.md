@@ -65,26 +65,48 @@ ffmpeg -re -rtsp_transport tcp -i "rtsp://<capture_device_host>:<port>/unicast" 
 
 ### YouTube data api
 
-The `<live-stream-key>` can be obtained by querying the YouTube data api. To use the api, an access
-token is required. To request an access token, the [Google auth endpoint](https://accounts.google.com/o/oauth2/v2/auth) needs to be called with the
-appropriate scope, the `client_id` and the `access_type` parameter set to `offline`. This will
-result in an authorization response that contains a refresh token which must be used to retrieve
+The `<live-stream-key>` can be obtained by querying the YouTube data api.
+
+#### Authentication
+
+To use the api, an access token is required. To request an access token, the [Google auth endpoint](https://accounts.google.com/o/oauth2/v2/auth) needs to be called with the
+appropriate scope, the `client_id`, the `access_type` parameter set to `offline` and the `prompt` parameter set to 
+`consent`. This will result in an authorization response that contains a refresh token which must be used to retrieve
 subsequent access tokens.
 
 To set up authentication, an application in the [Google developer console](https://console.developers.google.com) needs to be created.
-The [YouTube data api](https://console.cloud.google.com/apis/library/youtube.googleapis.com) needs to be enabled and an [oauth client](https://console.cloud.google.com/apis/credentials/oauthclient) desktop application needs to be 
-created. The last step is to create an [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent).
+The [YouTube data api](https://console.cloud.google.com/apis/library/youtube.googleapis.com) needs to be enabled and an [oauth client](https://console.cloud.google.com/apis/credentials/oauthclient) desktop or web application needs to be 
+created. 
 
-After authentication has been configured, the oauth client credentials need to be provided to
-the transformer. This can be done by running the [client-variables.sh](/transformer/youtube-api-client/client-variables.sh) script.
+##### Desktop App credentials
 
-The transformer contains scripts using the YouTube data api. To start a live stream, a [`livestream resource`](https://developers.google.com/youtube/v3/live/docs/liveStreams#resource)
+Using a desktop application credential configuration sets the redirect url to a static value, that is used for 
+out of band authorization requests. This means that the authorization code has to be copied manually from the browser.
+This credential configuration is going to be deprecated by Google on October 3, 2022.
+
+##### Web App credentials
+
+Using a web application credential configuration requires a https endpoint which can receive the authentication request
+redirected by Google. These scripts provide that endpoint if you have configured the domain and secured it via ssl. You
+need to provide the authentication url to this script, it should be in the form https://hostname.tld/oauth.html and must
+be the exact same string entered in the web application credential configuration in the Google developer console. To 
+provide the endpoint, script will configure [socat](https://linux.die.net/man/1/socat) to listen on port 443, it is therefore requiring sudo permissions. 
+Theses elevated privileges will be immediately revoked after the authentication redirect has been successfully received.
+
+The last step is to create an [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent).
+
+#### YouTube data api calls
+
+To start a live stream, a [`livestream resource`](https://developers.google.com/youtube/v3/live/docs/liveStreams#resource)
 needs to be [`inserted`](https://developers.google.com/youtube/v3/live/docs/liveStreams/insert). The data is fed to the livestream with the `ffmpeg` command. To view the livestream
 on YouTube, a [`livebroadcast resource`](https://developers.google.com/youtube/v3/live/docs/liveBroadcasts#resource) needs to be created and [`bound`](https://developers.google.com/youtube/v3/live/docs/liveBroadcasts/bind#streamId) to the `livestream resource`
 via the livestream [`id`](https://developers.google.com/youtube/v3/live/docs/liveStreams#id). After the broadcast is successfully bound to the livestream, it needs to
 be [`transitioned`](https://developers.google.com/youtube/v3/live/docs/liveBroadcasts/transition#broadcastStatus) to the [`live`](https://developers.google.com/youtube/v3/live/docs/liveBroadcasts#status.lifeCycleStatus) status.
 
 Livebroadcasts can be added to a [`playlist`](https://developers.google.com/youtube/v3/docs/playlists#resource) as a [`playlistItem`](https://developers.google.com/youtube/v3/docs/playlistItems#resource).
+This is happening for the most recent inserted broadcast in the [`broadcast-complete-current-start-new.sh`](transformer/broadcast-complete-current-start-new.sh#L23) script.
+
+### Dependencies
 
 All the http requests are made with [curl](https://curl.se/). Json parsing is done with [jq](https://stedolan.github.io/jq/).
 Jobs are controlled with [screen](https://www.gnu.org/software/screen/).
