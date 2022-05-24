@@ -18,6 +18,6 @@ if [[ $streamStatus != "active" ]]; then
   screen -S raupe -X quit
   "$scriptPath/transformer-run.sh"
   sleep 10
-  "$scriptPath/$0"
+  /bin/bash $(realpath "$0")
   exit 0
 fi
