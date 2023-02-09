@@ -90,8 +90,10 @@ Using a web application credential configuration requires a https endpoint which
 redirected by Google. These scripts provide that endpoint if you have configured the domain and secured it via ssl. You
 need to provide the authentication url to this script, it should be in the form https://hostname.tld/oauth.html and must
 be the exact same string entered in the web application credential configuration in the Google developer console. To 
-provide the endpoint, script will configure [socat](https://linux.die.net/man/1/socat) to listen on port 443, it is therefore requiring sudo permissions. 
-Theses elevated privileges will be immediately revoked after the authentication redirect has been successfully received.
+provide the https endpoint, the [wait-for-authcode.sh](/transformer/youtube-api-client/oauth-redirect/wait-for-authcode.sh#L15)
+script will configure [socat](https://linux.die.net/man/1/socat) to listen on port 443, it is therefore requiring sudo permissions. 
+These permissions will be granted by [toggle-socat-unprivileged-access-to-low-tcp-ports.sh](/transformer/youtube-api-client/oauth-redirect/toggle-socat-unprivileged-access-to-low-tcp-ports.sh),
+the permissions will be immediately [revoked]((/transformer/youtube-api-client/oauth-redirect/wait-for-authcode.sh#L18)) after the authentication redirect has been successfully received.
 
 The last step is to create an [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent).
 
