@@ -93,7 +93,7 @@ be the exact same string entered in the web application credential configuration
 provide the https endpoint, the [wait-for-authcode.sh](/transformer/youtube-api-client/oauth-redirect/wait-for-authcode.sh#L15)
 script will configure [socat](https://linux.die.net/man/1/socat) to listen on port 443, it is therefore requiring sudo permissions. 
 These permissions will be granted by [toggle-socat-unprivileged-access-to-low-tcp-ports.sh](/transformer/youtube-api-client/oauth-redirect/toggle-socat-unprivileged-access-to-low-tcp-ports.sh),
-the permissions will be immediately [revoked]((/transformer/youtube-api-client/oauth-redirect/wait-for-authcode.sh#L18)) after the authentication redirect has been successfully received.
+the permissions will be immediately [revoked](/transformer/youtube-api-client/oauth-redirect/wait-for-authcode.sh#L18) after the authentication redirect has been successfully received.
 
 The last step is to create an [OAuth consent screen](https://console.cloud.google.com/apis/credentials/consent).
 
